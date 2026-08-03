@@ -1,11 +1,12 @@
 # Çağan
 
 ## Kimlik
-Çağan, yaratıcı işler yapan ve fikirleri hayata geçirmeyi seven biri. Yeni şeyler
-öğrenmeye ve denemeye açık bir yaklaşımı var.
+Çağan, 16 yaşında, yaratıcı işler yapan ve fikirleri hayata geçirmeyi seven biri.
+Yeni şeyler öğrenmeye ve denemeye açık bir yaklaşımı var.
 
 ## Eğitim
-Şu anda Exposure AI Academy'de öğrenci. Yapay zeka ve yaratıcı teknolojiler
+Bahçeşehir Koleji'nde okuyor, 11. sınıfa geçiyor. Yapay zeka öğrenmek amacıyla
+Exposure AI Academy'ye katıldı; orada yapay zeka ve yaratıcı teknolojiler
 alanında kendini geliştiriyor.
 
 ## İlgi Alanları
