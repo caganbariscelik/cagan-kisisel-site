@@ -222,6 +222,201 @@
     text-transform: uppercase;
     color: #4d4a5c;
   }
+
+  /* Chat widget */
+  .chat-toggle {
+    position: fixed;
+    right: 1.4rem;
+    bottom: 1.4rem;
+    z-index: 10;
+    width: 56px;
+    height: 56px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: var(--fg);
+    cursor: pointer;
+    box-shadow: 0 10px 30px -8px rgba(255,106,61,0.55);
+    transition: transform 0.25s ease;
+  }
+  .chat-toggle:hover { transform: scale(1.06); }
+  .chat-toggle svg { width: 24px; height: 24px; }
+  .chat-toggle .icon-close { display: none; }
+  .chat-toggle.open .icon-chat { display: none; }
+  .chat-toggle.open .icon-close { display: block; }
+
+  .chat-panel {
+    position: fixed;
+    right: 1.4rem;
+    bottom: 5.4rem;
+    z-index: 10;
+    width: min(380px, calc(100vw - 2.4rem));
+    height: min(560px, 70vh);
+    background: rgba(15,13,20,0.92);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    backdrop-filter: blur(16px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    box-shadow: 0 24px 60px -20px rgba(0,0,0,0.6);
+  }
+  .chat-panel.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .chat-head {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .chat-head .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-3);
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .msg {
+    max-width: 85%;
+    padding: 0.6rem 0.9rem;
+    border-radius: 14px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .msg.assistant {
+    align-self: flex-start;
+    background: rgba(255,255,255,0.06);
+    color: var(--fg);
+    border-bottom-left-radius: 4px;
+  }
+  .msg.user {
+    align-self: flex-end;
+    background: linear-gradient(120deg, var(--accent), var(--accent-2));
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .msg.error {
+    align-self: center;
+    background: rgba(255,80,80,0.12);
+    color: #ffb4b4;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+
+  .typing {
+    display: inline-flex;
+    gap: 4px;
+    align-self: flex-start;
+    padding: 0.6rem 0.9rem;
+    background: rgba(255,255,255,0.06);
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+  }
+  .typing span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: bounce 1.2s infinite ease-in-out;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.15s; }
+  .typing span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+
+  .chat-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0 1.2rem 0.9rem;
+  }
+  .chat-chips button {
+    font-family: inherit;
+    font-size: 0.76rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.03);
+    color: var(--fg);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .chat-chips button:hover {
+    border-color: var(--accent);
+    background: rgba(255,106,61,0.1);
+  }
+
+  .chat-form {
+    display: flex;
+    gap: 0.6rem;
+    padding: 0.8rem;
+    border-top: 1px solid var(--line);
+  }
+  .chat-form input {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.6rem 1rem;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: 0.85rem;
+    outline: none;
+  }
+  .chat-form input:focus { border-color: var(--accent); }
+  .chat-form button {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .chat-form button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .chat-form svg { width: 16px; height: 16px; }
+
+  @media (max-width: 640px) {
+    .chat-panel {
+      right: 0.7rem;
+      left: 0.7rem;
+      bottom: 5rem;
+      width: auto;
+      height: min(72dvh, 640px);
+    }
+  }
 </style>
 </head>
 <body>
@@ -262,6 +457,23 @@
 </main>
 
 <footer>© 2026 Çağan</footer>
+
+<button id="chatToggle" class="chat-toggle" aria-label="Sohbeti aç/kapat">
+  <svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+  <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+</button>
+
+<div id="chatPanel" class="chat-panel">
+  <div class="chat-head"><span class="dot"></span>Çağan'ın Asistanı</div>
+  <div id="chatMessages" class="chat-messages"></div>
+  <div id="chatChips" class="chat-chips"></div>
+  <form id="chatForm" class="chat-form">
+    <input id="chatInput" type="text" placeholder="Bir şey sor..." autocomplete="off" maxlength="500" />
+    <button type="submit" id="chatSend" aria-label="Gönder">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </form>
+</div>
 
 <script>
   const canvas = document.getElementById('bg');
@@ -340,6 +552,121 @@
     requestAnimationFrame(draw);
   }
   draw();
+</script>
+
+<script>
+  const WELCOME = "Merhaba! Çağan hakkında merak ettiklerini sorabilirsin.";
+  const STARTERS = [
+    "Çağan kim?",
+    "Hangi alanlarla ilgileniyor?",
+    "Ona nasıl ulaşabilirim?",
+  ];
+
+  const toggleBtn = document.getElementById('chatToggle');
+  const panel = document.getElementById('chatPanel');
+  const messagesEl = document.getElementById('chatMessages');
+  const chipsEl = document.getElementById('chatChips');
+  const formEl = document.getElementById('chatForm');
+  const inputEl = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('chatSend');
+
+  let history = [];
+  let opened = false;
+
+  function addMessage(role, text) {
+    const div = document.createElement('div');
+    div.className = 'msg ' + role;
+    div.textContent = text;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return div;
+  }
+
+  function showTyping() {
+    const el = document.createElement('div');
+    el.className = 'typing';
+    el.id = 'typingIndicator';
+    el.innerHTML = '<span></span><span></span><span></span>';
+    messagesEl.appendChild(el);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function hideTyping() {
+    const el = document.getElementById('typingIndicator');
+    if (el) el.remove();
+  }
+
+  function renderChips() {
+    chipsEl.innerHTML = '';
+    STARTERS.forEach((q) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = q;
+      btn.addEventListener('click', () => sendMessage(q));
+      chipsEl.appendChild(btn);
+    });
+  }
+
+  async function sendMessage(text) {
+    const trimmed = text.trim();
+    if (!trimmed || sendBtn.disabled) return;
+
+    addMessage('user', trimmed);
+    history.push({ role: 'user', content: trimmed });
+    inputEl.value = '';
+    chipsEl.innerHTML = '';
+    sendBtn.disabled = true;
+    showTyping();
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: trimmed, history, lang: document.documentElement.lang || 'tr' }),
+      });
+
+      hideTyping();
+
+      if (!res.ok) {
+        addMessage('error', 'Şu an cevap veremiyorum, birazdan tekrar dener misin?');
+        return;
+      }
+
+      const data = await res.json();
+      addMessage('assistant', data.reply);
+      history.push({ role: 'assistant', content: data.reply });
+    } catch {
+      hideTyping();
+      addMessage('error', 'Bağlantı sorunu oluştu, birazdan tekrar dener misin?');
+    } finally {
+      sendBtn.disabled = false;
+    }
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    opened = !opened;
+    toggleBtn.classList.toggle('open', opened);
+    panel.classList.toggle('open', opened);
+
+    if (opened && messagesEl.childElementCount === 0) {
+      addMessage('assistant', WELCOME);
+      renderChips();
+    }
+    if (opened) inputEl.focus();
+  });
+
+  formEl.addEventListener('submit', (e) => {
+    e.preventDefault();
+    sendMessage(inputEl.value);
+  });
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', () => {
+      if (opened) {
+        panel.style.height = Math.min(window.visualViewport.height * 0.72, 640) + 'px';
+      }
+    });
+  }
 </script>
 
 </body>
