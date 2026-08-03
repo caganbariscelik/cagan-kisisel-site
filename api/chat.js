@@ -4,6 +4,7 @@ const path = require('path');
 const PROFILE_PATH = path.join(__dirname, '..', 'profile.md');
 const MAX_MESSAGE_LENGTH = 500;
 const MAX_HISTORY = 8;
+const BEDROCK_ENDPOINT = 'https://bedrock-mantle.us-east-1.api.aws/openai/v1/chat/completions';
 
 function buildSystemPrompt(profile, lang) {
   const language = lang === 'en' ? 'English' : 'Türkçe';
@@ -55,27 +56,30 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'profile_unavailable' });
   }
 
-  const endpoint = process.env.BEDROCK_ENDPOINT;
   const apiKey = process.env.BEDROCK_API_KEY;
+  const model = process.env.BEDROCK_MODEL;
 
-  if (!endpoint || !apiKey) {
+  if (!apiKey || !model) {
     return res.status(500).json({ error: 'server_misconfigured' });
   }
 
   const systemPrompt = buildSystemPrompt(profile, lang);
 
   try {
-    // TODO: Akademinin Bedrock proxy'sinin gerçek istek/cevap formatına göre
-    // güncellenmeli — bu, proxy dokümantasyonu paylaşılınca netleşecek.
-    const upstream = await fetch(endpoint, {
+    // OpenAI uyumlu "chat completions" formatı.
+    const upstream = await fetch(BEDROCK_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        system: systemPrompt,
-        messages: [...safeHistory, { role: 'user', content: message }],
+        model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...safeHistory,
+          { role: 'user', content: message },
+        ],
       }),
     });
 
@@ -84,7 +88,7 @@ module.exports = async function handler(req, res) {
     }
 
     const data = await upstream.json();
-    const reply = data.reply ?? data.output ?? data.content;
+    const reply = data.choices?.[0]?.message?.content;
 
     if (typeof reply !== 'string') {
       return res.status(502).json({ error: 'unexpected_upstream_response' });
