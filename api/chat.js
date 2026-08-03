@@ -5,6 +5,7 @@ const PROFILE_PATH = path.join(__dirname, '..', 'profile.md');
 const MAX_MESSAGE_LENGTH = 500;
 const MAX_HISTORY = 8;
 const BEDROCK_ENDPOINT = 'https://bedrock-mantle.us-east-1.api.aws/openai/v1/chat/completions';
+const BEDROCK_MODEL = 'google.gemma-4-31b';
 
 function buildSystemPrompt(profile, lang) {
   const language = lang === 'en' ? 'English' : 'Türkçe';
@@ -57,9 +58,8 @@ module.exports = async function handler(req, res) {
   }
 
   const apiKey = process.env.BEDROCK_API_KEY;
-  const model = process.env.BEDROCK_MODEL;
 
-  if (!apiKey || !model) {
+  if (!apiKey) {
     return res.status(500).json({ error: 'server_misconfigured' });
   }
 
@@ -74,7 +74,7 @@ module.exports = async function handler(req, res) {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model,
+        model: BEDROCK_MODEL,
         messages: [
           { role: 'system', content: systemPrompt },
           ...safeHistory,
