@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mert</title>
+<meta name="description" content="Mert — piyano ve gitar çalan 16 yaşında bir müzisyen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0906;
+    --fg: #f4ece0;
+    --accent: #e8b84b;
+    --accent-2: #c1443c;
+    --accent-soft: rgba(232,184,75,0.14);
+    --muted: #a89686;
+    --line: rgba(244,236,224,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  canvas#viz {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.55;
+  }
+
+  .vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.65) 100%);
+  }
+
+  section {
+    position: relative;
+    z-index: 2;
+    padding: 6rem 1.5rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 4rem;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 1.4rem;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--line);
+  }
+
+  h1.name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(3.4rem, 14vw, 7.5rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    background: linear-gradient(115deg, var(--fg) 25%, var(--accent) 65%, var(--accent-2) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.5));
+  }
+
+  .tagline {
+    margin-top: 1.4rem;
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    font-weight: 300;
+    color: #ded2c0;
+    max-width: 30rem;
+  }
+
+  .instrument-toggle {
+    margin-top: 2.6rem;
+    display: inline-flex;
+    gap: 0.6rem;
+    padding: 0.4rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(10px);
+  }
+  .instrument-toggle button {
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-radius: 999px;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .instrument-toggle button.active {
+    color: var(--bg);
+    background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  }
+
+  .instrument-caption {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    min-height: 1.2em;
+  }
+
+  h2.heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    margin-bottom: 1.6rem;
+  }
+
+  .bio {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: #ded2c0;
+    max-width: 42rem;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.6rem;
+  }
+  .chips span {
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .now {
+    margin-top: 1.8rem;
+    font-size: 0.92rem;
+    color: var(--muted);
+    padding-left: 1rem;
+    border-left: 2px solid var(--accent);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  .card {
+    border: 1px dashed var(--line);
+    border-radius: 16px;
+    padding: 1.6rem;
+    background: rgba(255,255,255,0.02);
+  }
+  .card .plus {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    margin-bottom: 0.9rem;
+  }
+  .card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--fg);
+  }
+  .card p {
+    font-size: 0.88rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .links, .contact-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.6rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--fg);
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 500;
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+  }
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, var(--accent), var(--accent-2));
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    z-index: -1;
+  }
+  .btn:hover {
+    border-color: transparent;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px -10px rgba(232,184,75,0.4);
+  }
+  .btn:hover::before { opacity: 1; }
+  .btn svg { width: 17px; height: 17px; flex-shrink: 0; }
+  .btn.primary {
+    background: linear-gradient(120deg, var(--accent), var(--accent-2));
+    color: #14100a;
+    font-weight: 600;
+  }
+  .btn.primary::before { display: none; }
+
+  .contact-note {
+    margin-top: 1.4rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  footer {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2.4rem 1rem 3.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #55493c;
+  }
+
+  @media (max-width: 640px) {
+    section { padding: 4rem 1.2rem; }
+    .instrument-toggle { flex-direction: row; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="viz"></canvas>
+<div class="vignette"></div>
+
+<section class="hero">
+  <div class="eyebrow">Müzisyen</div>
+  <h1 class="name">Mert</h1>
+  <p class="tagline">Piyano ve gitarla melodiler üreten 16 yaşında bir müzisyen.</p>
+
+  <div class="instrument-toggle" role="group" aria-label="Enstrüman seç">
+    <button type="button" id="btnPiano" class="active">🎹 Piyano</button>
+    <button type="button" id="btnGuitar">🎸 Gitar</button>
+  </div>
+  <div class="instrument-caption" id="instrumentCaption">Piyano tuşları gibi akan bir ritim.</div>
+</section>
+
+<section id="hakkimda">
+  <h2 class="heading">Hakkımda</h2>
+  <p class="bio">
+    Merhaba, ben Mert. 16 yaşındayım ve piyano ile gitar çalıyorum. Melodiler üzerinde
+    çalışmayı, yeni parçalar öğrenmeyi ve müzikle vakit geçirmeyi seviyorum.
+  </p>
+  <div class="chips">
+    <span>Piyano</span>
+    <span>Gitar</span>
+    <span>Yeni parça öğrenmek</span>
+  </div>
+  <p class="now">Şu an: repertuarını genişletiyor ve yeni parçalar üzerinde çalışıyor.</p>
+</section>
+
+<section id="basarilar">
+  <h2 class="heading">Başarılar</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="plus">+</div>
+      <h3>Bir başarını ekle</h3>
+      <p>Katıldığın bir konser, yarışma, resital ya da yayınladığın bir parça varsa buraya adını ve kısa açıklamasını yazabilirsin.</p>
+    </div>
+    <div class="card">
+      <div class="plus">+</div>
+      <h3>Bir başarını daha ekle</h3>
+      <p>Varsa bir video/Spotify/YouTube linki de ekleyerek bu kartı doldurabilirsin.</p>
+    </div>
+  </div>
+</section>
+
+<section id="baglantilar">
+  <h2 class="heading">Bağlantılar</h2>
+  <div class="links">
+    <a class="btn" href="https://instagram.com/mertergin__" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      @mertergin__
+    </a>
+  </div>
+</section>
+
+<section id="iletisim">
+  <h2 class="heading">İletişim</h2>
+  <div class="contact-box">
+    <a class="btn primary" href="https://instagram.com/mertergin__" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      Instagram'dan Yaz
+    </a>
+  </div>
+  <p class="contact-note">En hızlı ulaşmanın yolu Instagram DM.</p>
+</section>
+
+<footer>© 2026 Mert</footer>
+
+<script>
+  const canvas = document.getElementById('viz');
+  const ctx = canvas.getContext('2d');
+  let w, h;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const palettes = {
+    piano: { a: '232,184,75', b: '244,236,224', speed: 0.045, jitter: 0.35 },
+    guitar: { a: '193,68,60', b: '232,184,75', speed: 0.09, jitter: 0.75 },
+  };
+  let mode = 'piano';
+
+  const BAR_COUNT = 48;
+  const bars = Array.from({ length: BAR_COUNT }, (_, i) => ({
+    phase: Math.random() * Math.PI * 2,
+    offset: i,
+  }));
+
+  let mx = 0.5;
+  window.addEventListener('pointermove', (e) => { mx = e.clientX / w; });
+
+  let t = 0;
+  function draw() {
+    const p = palettes[mode];
+    t += p.speed;
+    ctx.clearRect(0, 0, w, h);
+
+    const barWidth = w / BAR_COUNT;
+    const baseY = h * 0.62;
+
+    bars.forEach((bar, i) => {
+      const wave = Math.sin(t + bar.phase + i * 0.35) * 0.5 + 0.5;
+      const jitterAmt = (Math.sin(t * 2.3 + i) * 0.5 + 0.5) * p.jitter;
+      const proximity = 1 - Math.min(Math.abs(mx - i / BAR_COUNT) * 3, 1);
+      const height = (0.08 + wave * 0.5 + jitterAmt * 0.3 + proximity * 0.25) * h * 0.4;
+
+      const x = i * barWidth;
+      const grad = ctx.createLinearGradient(0, baseY, 0, baseY - height);
+      grad.addColorStop(0, `rgba(${p.a},0.55)`);
+      grad.addColorStop(1, `rgba(${p.b},0.05)`);
+      ctx.fillStyle = grad;
+      ctx.fillRect(x + barWidth * 0.15, baseY - height, barWidth * 0.7, height);
+    });
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  const btnPiano = document.getElementById('btnPiano');
+  const btnGuitar = document.getElementById('btnGuitar');
+  const caption = document.getElementById('instrumentCaption');
+
+  btnPiano.addEventListener('click', () => {
+    mode = 'piano';
+    btnPiano.classList.add('active');
+    btnGuitar.classList.remove('active');
+    caption.textContent = 'Piyano tuşları gibi akan bir ritim.';
+  });
+  btnGuitar.addEventListener('click', () => {
+    mode = 'guitar';
+    btnGuitar.classList.add('active');
+    btnPiano.classList.remove('active');
+    caption.textContent = 'Gitar tellerinin daha keskin, canlı titreşimi.';
+  });
+</script>
+
+</body>
+</html>
