@@ -1079,8 +1079,8 @@
     const ctx = canvas.getContext('2d');
 
     const W = 600, H = 360;
-    const GRAVITY = 1000;
-    const POWER = 4.4;
+    const GRAVITY = 650;
+    const POWER = 6.5;
     const BALL_R = 15;
     const START = { x: 70, y: H - 60 };
     const HOOP = { x: W - 110, y: 108, halfWidth: 34 };
@@ -1145,7 +1145,7 @@
     canvas.addEventListener('pointermove', (e) => {
       if (!dragging) return;
       dragPos = toCanvasPos(e.clientX, e.clientY);
-      const maxPull = 90;
+      const maxPull = 115;
       const dx = dragPos.x - ball.x;
       const dy = dragPos.y - ball.y;
       const d = Math.hypot(dx, dy);
@@ -1175,8 +1175,8 @@
 
     function checkScore() {
       if (ball.scored || ball.vy <= 0) return;
-      const withinX = Math.abs(ball.x - HOOP.x) < HOOP.halfWidth * 0.55;
-      const withinY = Math.abs(ball.y - HOOP.y) < 12;
+      const withinX = Math.abs(ball.x - HOOP.x) < HOOP.halfWidth * 0.75;
+      const withinY = Math.abs(ball.y - HOOP.y) < 18;
       if (withinX && withinY) {
         ball.scored = true;
         score++;
