@@ -101,6 +101,7 @@
   .reveal:nth-child(7) { animation-delay: 0.98s; }
   .reveal:nth-child(8) { animation-delay: 1.14s; }
   .reveal:nth-child(9) { animation-delay: 1.3s; }
+  .reveal:nth-child(10) { animation-delay: 1.46s; }
 
   @keyframes rise {
     to { opacity: 1; transform: translateY(0); }
@@ -390,6 +391,45 @@
 
   @media (min-width: 860px) {
     .project-grid.three { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .skills {
+    margin-top: 4.4rem;
+    width: 100%;
+    max-width: 40rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .skill-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    width: 100%;
+  }
+
+  .skill-chip {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(10px);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--fg);
+    transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+  }
+
+  .skill-chip:hover {
+    border-color: color-mix(in srgb, var(--accent-3) 50%, var(--line));
+    background: color-mix(in srgb, var(--accent-3) 10%, transparent);
+    transform: translateY(-2px);
+  }
+
+  @media (min-width: 640px) {
+    .skills { align-items: center; }
+    .skill-cloud { justify-content: center; }
   }
 
   footer {
@@ -744,6 +784,20 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
         </span>
       </a>
+    </div>
+  </section>
+
+  <section class="skills reveal">
+    <div class="section-eyebrow">Yetenekler</div>
+    <div class="skill-cloud">
+      <span class="skill-chip">Next.js</span>
+      <span class="skill-chip">React</span>
+      <span class="skill-chip">AI / LLM Entegrasyonu</span>
+      <span class="skill-chip">Görüntü Analizi (Vision AI)</span>
+      <span class="skill-chip">Prompt Engineering</span>
+      <span class="skill-chip">Google Sheets API</span>
+      <span class="skill-chip">Supabase</span>
+      <span class="skill-chip">Vercel</span>
     </div>
   </section>
 </main>
