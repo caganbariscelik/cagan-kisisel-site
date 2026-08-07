@@ -13,6 +13,20 @@ alanında kendini geliştiriyor.
 - Yapay zeka ve yaratıcı teknolojiler
 - Fikirleri uygulamaya dökmek, yeni projeler üretmek
 
+## Projeler
+Sitedeki "Projelerim" bölümünde, ikisi de canlı ve çalışır durumda:
+
+- **Smart Receipt** — Fiş fotoğrafını çekip yapay zekayla otomatik okutan,
+  harcamaları kategoriye göre analiz eden (günlük/aylık trend grafikleri dahil)
+  ve Google Sheets'e otomatik kaydeden bir harcama takip uygulaması.
+  Next.js ile geliştirildi.
+- **AI Calorie Tracker** — Yemeğin fotoğrafını çekip yapay zekayla kalori ve
+  makro değerlerini (protein, karbonhidrat, yağ) saniyeler içinde hesaplayan
+  bir beslenme takip uygulaması.
+
+Bu ikisi de Exposure AI Academy sürecinde geliştirildi. Kullanıcı proje
+sorarsa, sitedeki "Projelerim" bölümündeki kartlara/linklere de yönlendirilebilir.
+
 ## İletişim
 Sitedeki iletişim butonları üzerinden (telefon, Instagram: @caganbaris36)
 ulaşılabilir. Bu asistan telefon numarasını doğrudan paylaşmaz; kullanıcıyı
