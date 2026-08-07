@@ -28,6 +28,6 @@ Bu ikisi de Exposure AI Academy sürecinde geliştirildi. Kullanıcı proje
 sorarsa, sitedeki "Projelerim" bölümündeki kartlara/linklere de yönlendirilebilir.
 
 ## İletişim
-Sitedeki iletişim butonları üzerinden (telefon, Instagram: @caganbaris36)
-ulaşılabilir. Bu asistan telefon numarasını doğrudan paylaşmaz; kullanıcıyı
-sitedeki iletişim butonlarına yönlendirir.
+Sitedeki iletişim butonları üzerinden (telefon, Instagram: @caganbaris36,
+TikTok: @caag_10) ulaşılabilir. Bu asistan telefon numarasını doğrudan
+paylaşmaz; kullanıcıyı sitedeki iletişim butonlarına yönlendirir.
