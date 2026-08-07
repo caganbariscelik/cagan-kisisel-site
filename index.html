@@ -204,7 +204,8 @@
     justify-content: center;
   }
 
-  .contact a {
+  .contact a,
+  .contact .info-pill {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -221,6 +222,11 @@
     backdrop-filter: blur(10px);
     overflow: hidden;
     transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .contact .info-pill {
+    color: var(--muted);
+    cursor: default;
   }
 
   .contact a::before {
@@ -715,6 +721,10 @@
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82c-1.02-.9-1.6-2.19-1.6-3.6h-3.16v13.86a2.6 2.6 0 1 1-2.6-2.6c.19 0 .38.02.56.05V10.4a5.8 5.8 0 0 0-.56-.03 5.76 5.76 0 1 0 5.76 5.76V9.4a8.15 8.15 0 0 0 4.6 1.42V7.66a4.98 4.98 0 0 1-2-1.84z"/></svg>
       @caag_10
     </a>
+    <span class="info-pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1 2.5 3 6 3s6-2 6-3v-5"/></svg>
+      Bahçeşehir Koleji Kemerburgaz · Exposure AI Academy
+    </span>
   </div>
 
   <section class="projects reveal">
