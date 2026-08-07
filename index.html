@@ -99,6 +99,7 @@
   .reveal:nth-child(5) { animation-delay: 0.66s; }
   .reveal:nth-child(6) { animation-delay: 0.82s; }
   .reveal:nth-child(7) { animation-delay: 0.98s; }
+  .reveal:nth-child(8) { animation-delay: 1.14s; }
 
   @keyframes rise {
     to { opacity: 1; transform: translateY(0); }
@@ -153,6 +154,29 @@
     color: #d4d0e0;
     max-width: 32rem;
     line-height: 1.6;
+  }
+
+  .age-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.4rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(10px);
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--muted);
+  }
+
+  .age-badge .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-3);
   }
 
   .divider {
@@ -638,6 +662,8 @@
   <div class="eyebrow reveal">Hakkımda</div>
   <h1 class="reveal">Çağan</h1>
   <p class="tagline reveal">Yaratıcı işler yapan, fikirleri hayata geçirmeyi seven biriyim.</p>
+
+  <div class="age-badge reveal"><span class="dot"></span>16 yaşında · Exposure AI Academy</div>
 
   <div class="divider reveal"></div>
 
