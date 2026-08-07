@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Çağan</title>
+<meta name="description" content="Çağan — Exposure AI Academy öğrencisi. Yapay zeka ve yaratıcı teknolojiler üzerine projeler geliştiriyor.">
+<meta property="og:title" content="Çağan">
+<meta property="og:description" content="Yapay zeka ve yaratıcı teknolojiler üzerine projeler geliştiren bir öğrenci.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cagan-kisisel-site.vercel.app">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Çağan">
+<meta name="twitter:description" content="Yapay zeka ve yaratıcı teknolojiler üzerine projeler geliştiren bir öğrenci.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2308070c'/><text x='50' y='68' font-size='56' font-family='Georgia, serif' font-weight='700' text-anchor='middle' fill='%23ff6a3d'>%C3%87</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -88,6 +97,8 @@
   .reveal:nth-child(3) { animation-delay: 0.34s; }
   .reveal:nth-child(4) { animation-delay: 0.5s; }
   .reveal:nth-child(5) { animation-delay: 0.66s; }
+  .reveal:nth-child(6) { animation-delay: 0.82s; }
+  .reveal:nth-child(7) { animation-delay: 0.98s; }
 
   @keyframes rise {
     to { opacity: 1; transform: translateY(0); }
@@ -204,6 +215,120 @@
 
   .contact a:hover::before {
     opacity: 1;
+  }
+
+  .section-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 1.6rem;
+  }
+
+  .section-eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .projects {
+    margin-top: 4.4rem;
+    width: 100%;
+    max-width: 40rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .project-card {
+    position: relative;
+    display: block;
+    text-align: left;
+    padding: 1.4rem 1.6rem;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(10px);
+    text-decoration: none;
+    color: var(--fg);
+    overflow: hidden;
+    transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255,106,61,0.14), rgba(139,107,255,0.14));
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    z-index: -1;
+  }
+
+  .project-card:hover {
+    border-color: transparent;
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px -14px rgba(139,107,255,0.4);
+  }
+
+  .project-card:hover::before {
+    opacity: 1;
+  }
+
+  .project-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-3);
+    margin-bottom: 0.6rem;
+  }
+
+  .project-card h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 1.35rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-card p {
+    font-size: 0.88rem;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--muted);
+    max-width: 34rem;
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.9rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  .project-card:hover .project-link {
+    color: var(--accent-3);
+  }
+
+  @media (min-width: 640px) {
+    .projects { align-items: center; }
+    .section-eyebrow { justify-content: center; }
   }
 
   .contact svg {
@@ -454,6 +579,24 @@
       @caganbaris36
     </a>
   </div>
+
+  <section class="projects reveal">
+    <div class="section-eyebrow">Projelerim</div>
+    <div class="project-grid">
+      <a class="project-card" href="https://smart-receipt-one.vercel.app" target="_blank" rel="noopener">
+        <span class="project-tag">AI · Next.js · Google Sheets</span>
+        <h3>Smart Receipt</h3>
+        <p>
+          Fiş fotoğrafını çek, yapay zeka bilgileri otomatik çıkarsın; harcamalarını
+          kategoriye göre analiz et, Google Sheets'e otomatik kaydolsun.
+        </p>
+        <span class="project-link">
+          Siteyi gör
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+        </span>
+      </a>
+    </div>
+  </section>
 </main>
 
 <footer>© 2026 Çağan</footer>
