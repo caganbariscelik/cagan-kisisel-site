@@ -106,6 +106,7 @@
   .reveal:nth-child(8) { animation-delay: 1.14s; }
   .reveal:nth-child(9) { animation-delay: 1.3s; }
   .reveal:nth-child(10) { animation-delay: 1.46s; }
+  .reveal:nth-child(11) { animation-delay: 1.62s; }
 
   @keyframes rise {
     to { opacity: 1; transform: translateY(0); }
@@ -434,6 +435,45 @@
   @media (min-width: 640px) {
     .skills { align-items: center; }
     .skill-cloud { justify-content: center; }
+  }
+
+  .game-card {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(14px);
+    padding: 1.1rem;
+  }
+
+  .game-canvas-wrap {
+    width: 100%;
+    aspect-ratio: 5 / 3;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(139,107,255,0.1), rgba(0,0,0,0.1));
+  }
+
+  #hoopGame {
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+    cursor: grab;
+  }
+
+  .game-score {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.9rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .game-score b {
+    color: var(--fg);
+    font-weight: 600;
   }
 
   footer {
@@ -804,6 +844,19 @@
       <span class="skill-chip">Vercel</span>
     </div>
   </section>
+
+  <section class="skills reveal">
+    <div class="section-eyebrow">Bir de Bunu Dene</div>
+    <div class="game-card">
+      <div class="game-canvas-wrap">
+        <canvas id="hoopGame"></canvas>
+      </div>
+      <div class="game-score">
+        <span>Topu sürükle, bırak, potaya at 🏀</span>
+        <span>Skor: <b id="gameScore">0</b> · En Yüksek: <b id="gameBest">0</b></span>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer>© 2026 Çağan</footer>
@@ -1017,6 +1070,235 @@
       }
     });
   }
+</script>
+
+<script>
+  (function () {
+    const canvas = document.getElementById('hoopGame');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const W = 600, H = 360;
+    const GRAVITY = 1000;
+    const POWER = 4.4;
+    const BALL_R = 15;
+    const START = { x: 70, y: H - 60 };
+    const HOOP = { x: W - 110, y: 108, halfWidth: 34 };
+
+    let dpr = Math.max(window.devicePixelRatio || 1, 1);
+
+    function resize() {
+      dpr = Math.max(window.devicePixelRatio || 1, 1);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      ctx.setTransform(dpr * (rect.width / W), 0, 0, dpr * (rect.height / H), 0, 0);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const ball = { x: START.x, y: START.y, vx: 0, vy: 0, flying: false, scored: false };
+    let dragging = false;
+    let dragPos = { x: START.x, y: START.y };
+    let flash = 0; // "SAYI!" fade timer
+    let resetAt = 0;
+
+    let best = 0;
+    try { best = parseInt(localStorage.getItem('hoopBest') || '0', 10) || 0; } catch {}
+    let score = 0;
+    const scoreEl = document.getElementById('gameScore');
+    const bestEl = document.getElementById('gameBest');
+    if (bestEl) bestEl.textContent = String(best);
+
+    function toCanvasPos(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (clientX - rect.left) * (W / rect.width),
+        y: (clientY - rect.top) * (H / rect.height),
+      };
+    }
+
+    function distance(ax, ay, bx, by) {
+      return Math.hypot(ax - bx, ay - by);
+    }
+
+    function resetBall() {
+      ball.x = START.x;
+      ball.y = START.y;
+      ball.vx = 0;
+      ball.vy = 0;
+      ball.flying = false;
+      ball.scored = false;
+    }
+
+    canvas.addEventListener('pointerdown', (e) => {
+      if (ball.flying) return;
+      const p = toCanvasPos(e.clientX, e.clientY);
+      if (distance(p.x, p.y, ball.x, ball.y) <= BALL_R * 2.2) {
+        dragging = true;
+        dragPos = p;
+        canvas.setPointerCapture(e.pointerId);
+        canvas.style.cursor = 'grabbing';
+      }
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      dragPos = toCanvasPos(e.clientX, e.clientY);
+      const maxPull = 90;
+      const dx = dragPos.x - ball.x;
+      const dy = dragPos.y - ball.y;
+      const d = Math.hypot(dx, dy);
+      if (d > maxPull) {
+        dragPos = { x: ball.x + (dx / d) * maxPull, y: ball.y + (dy / d) * maxPull };
+      }
+    });
+
+    function launch() {
+      if (!dragging) return;
+      dragging = false;
+      canvas.style.cursor = 'grab';
+      const dx = ball.x - dragPos.x;
+      const dy = ball.y - dragPos.y;
+      if (Math.hypot(dx, dy) < 6) return; // ihmal edilebilir sürükleme, atış sayılmaz
+      ball.vx = dx * POWER;
+      ball.vy = dy * POWER;
+      ball.flying = true;
+      ball.scored = false;
+    }
+
+    canvas.addEventListener('pointerup', launch);
+    canvas.addEventListener('pointercancel', () => {
+      dragging = false;
+      canvas.style.cursor = 'grab';
+    });
+
+    function checkScore() {
+      if (ball.scored || ball.vy <= 0) return;
+      const withinX = Math.abs(ball.x - HOOP.x) < HOOP.halfWidth * 0.55;
+      const withinY = Math.abs(ball.y - HOOP.y) < 12;
+      if (withinX && withinY) {
+        ball.scored = true;
+        score++;
+        if (scoreEl) scoreEl.textContent = String(score);
+        if (score > best) {
+          best = score;
+          if (bestEl) bestEl.textContent = String(best);
+          try { localStorage.setItem('hoopBest', String(best)); } catch {}
+        }
+        flash = 1;
+        resetAt = performance.now() + 500;
+        ball.flying = false;
+      }
+    }
+
+    let lastT = performance.now();
+    function update(t) {
+      const dt = Math.min((t - lastT) / 1000, 0.032);
+      lastT = t;
+
+      if (ball.flying) {
+        ball.vy += GRAVITY * dt;
+        ball.x += ball.vx * dt;
+        ball.y += ball.vy * dt;
+        checkScore();
+
+        const outOfBounds =
+          ball.x < -30 || ball.x > W + 30 || ball.y > H + 30;
+        const hitFloor = ball.y + BALL_R >= H - 4 && ball.vy > 0;
+
+        if (outOfBounds || hitFloor) {
+          ball.flying = false;
+          resetAt = t + (hitFloor ? 350 : 150);
+        }
+      } else if (resetAt && t >= resetAt) {
+        resetAt = 0;
+        resetBall();
+      }
+
+      if (flash > 0) flash = Math.max(0, flash - dt * 1.6);
+
+      draw();
+      requestAnimationFrame(update);
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Zemin çizgisi
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, H - 4);
+      ctx.lineTo(W, H - 4);
+      ctx.stroke();
+
+      // Pota panosu
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(HOOP.x + HOOP.halfWidth + 6, HOOP.y - 46);
+      ctx.lineTo(HOOP.x + HOOP.halfWidth + 6, HOOP.y + 20);
+      ctx.stroke();
+
+      // Çember
+      ctx.strokeStyle = '#ff6a3d';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(HOOP.x - HOOP.halfWidth, HOOP.y);
+      ctx.lineTo(HOOP.x + HOOP.halfWidth, HOOP.y);
+      ctx.stroke();
+
+      // File
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+      ctx.lineWidth = 1.5;
+      for (let i = -2; i <= 2; i++) {
+        ctx.beginPath();
+        ctx.moveTo(HOOP.x + i * (HOOP.halfWidth / 2.4), HOOP.y + 2);
+        ctx.lineTo(HOOP.x + i * (HOOP.halfWidth / 4), HOOP.y + 30);
+        ctx.stroke();
+      }
+
+      // Sürükleme çizgisi
+      if (dragging) {
+        ctx.setLineDash([6, 6]);
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(ball.x, ball.y);
+        ctx.lineTo(dragPos.x, dragPos.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // Top
+      ctx.fillStyle = '#ff6a3d';
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, BALL_R, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(ball.x - BALL_R, ball.y);
+      ctx.lineTo(ball.x + BALL_R, ball.y);
+      ctx.moveTo(ball.x, ball.y - BALL_R);
+      ctx.lineTo(ball.x, ball.y + BALL_R);
+      ctx.stroke();
+
+      // "SAYI!" yanıp sönmesi
+      if (flash > 0) {
+        ctx.globalAlpha = flash;
+        ctx.fillStyle = '#3dd6c8';
+        ctx.font = '700 28px Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('SAYI!', HOOP.x, HOOP.y - 30);
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    requestAnimationFrame(update);
+  })();
 </script>
 
 </body>

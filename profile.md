@@ -32,6 +32,11 @@ sorarsa, sitedeki "Projelerim" bölümündeki kartlara/linklere de yönlendirile
 Next.js, React, AI/LLM entegrasyonu, görüntü analizi (vision AI), prompt
 engineering, Google Sheets API, Supabase, Vercel.
 
+## Sitedeki Ekstra
+Sayfanın en altında "Bir de Bunu Dene" başlıklı, canvas ile yapılmış küçük
+bir basketbol atış oyunu var — topu sürükleyip potaya atıyorsun, skor
+tutuluyor. Basketbol geçmişine bir gönderme.
+
 ## İletişim
 Sitedeki iletişim butonları üzerinden (telefon, Instagram: @caganbaris36,
 TikTok: @caag_10) ulaşılabilir. Bu asistan telefon numarasını doğrudan
