@@ -12,7 +12,7 @@ alanında kendini geliştiriyor.
 ## İlgi Alanları
 - Yapay zeka ve yaratıcı teknolojiler
 - Fikirleri uygulamaya dökmek, yeni projeler üretmek
-- Basketbol (profesyonel olarak oynuyor)
+- Basketbol (8 yaşından 16 yaşına kadar profesyonel olarak oynadı)
 
 ## Projeler
 Sitedeki "Projelerim" bölümünde, ikisi de canlı ve çalışır durumda:
