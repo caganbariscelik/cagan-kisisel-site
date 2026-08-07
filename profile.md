@@ -12,6 +12,7 @@ alanında kendini geliştiriyor.
 ## İlgi Alanları
 - Yapay zeka ve yaratıcı teknolojiler
 - Fikirleri uygulamaya dökmek, yeni projeler üretmek
+- Basketbol
 
 ## Projeler
 Sitedeki "Projelerim" bölümünde, ikisi de canlı ve çalışır durumda:
