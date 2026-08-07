@@ -5,9 +5,9 @@
 Yeni şeyler öğrenmeye ve denemeye açık bir yaklaşımı var.
 
 ## Eğitim
-Bahçeşehir Koleji'nde okuyor, 11. sınıfa geçiyor. Yapay zeka öğrenmek amacıyla
-Exposure AI Academy'ye katıldı; orada yapay zeka ve yaratıcı teknolojiler
-alanında kendini geliştiriyor.
+Bahçeşehir Koleji Kemerburgaz'da okuyor, 11. sınıfa geçiyor. Yazın, yazılım ve
+yapay zeka öğrenmek amacıyla Exposure AI Academy'ye katılıyor; orada yapay
+zeka ve yaratıcı teknolojiler alanında kendini geliştiriyor.
 
 ## İlgi Alanları
 - Yapay zeka ve yaratıcı teknolojiler
